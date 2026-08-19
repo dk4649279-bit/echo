@@ -1,0 +1,29 @@
+name: Modify Robot
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  modify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Blender
+        run: |
+          wget -q https://download.blender.org/release/Blender4.1/blender-4.1.0-linux-x64.tar.xz
+          tar -xf blender-4.1.0-linux-x64.tar.xz
+          sudo mv blender-4.1.0-linux-x64 /opt/blender
+
+      - name: Run Blender script
+        run: |
+          /opt/blender/blender --background --python scripts/modify_robot.py
+
+      - name: Upload modified robot
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot_k4000
+          path: assets/robot_k4000.glb
