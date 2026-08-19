@@ -1,0 +1,24 @@
+name: Verify Godot Project
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Godot 4.2 stable
+        run: |
+          wget https://github.com/godotengine/godot/releases/download/4.2-stable/Godot_v4.2-stable_linux.x86_64.zip
+          unzip Godot_v4.2-stable_linux.x86_64.zip
+          mv Godot_v4.2-stable_linux.x86_64 godot
+          chmod +x godot
+
+      - name: Run Godot headless to verify project
+        run: |
+          ./godot --headless --quit
